@@ -29,7 +29,7 @@ const Header = () => {
               <li key={path}>
                 <Link
                   to={path}
-                  className={`text-lg font-bold uppercase hover:underline ${
+                  className={`text-lg uppercase hover:underline ${
                     isDetailPage ? 'text-black' : 'text-white'
                   }`}
                 >
