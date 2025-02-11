@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { FaSearch, FaUser, FaShoppingBag } from 'react-icons/fa'; // 아이콘 추가
+import logo from '../assets/logo.svg';
 
 const Header = () => {
   const location = useLocation(); // 현재 경로 가져오기
@@ -7,15 +8,11 @@ const Header = () => {
 
   return (
     <header className='fixed top-0 left-0 w-full z-50 bg-transparent'>
-      <div className='container mx-auto px-6 py-4 flex justify-between items-center'>
-        <h1>
-          <Link
-            to='/'
-            className={`text-3xl font-bold tracking-wide uppercase ${
-              isDetailPage ? 'text-black' : 'text-white'
-            }`}
-          >
-            tamburins
+      <div className='mx-auto px-6 py-4 flex justify-between items-center'>
+        <h1 className='shrink-0'>
+          <Link to='/'>
+            <img src={logo} alt='' />
+            <span className='sr-only'>tamburins</span>
           </Link>
         </h1>
 
