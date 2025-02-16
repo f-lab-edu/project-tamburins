@@ -19,11 +19,11 @@ const Header = () => {
         <nav>
           <ul className='flex space-x-6'>
             {[
-              { path: '/evening-glow', label: 'evening glow' },
-              { path: '/perfume', label: 'perfume' },
-              { path: '/hand-lip', label: 'hand&lip' },
-              { path: '/body', label: 'body' },
-              { path: '/home-fragrance', label: 'home fragrance' },
+              { path: '/category/evening-glow', label: 'evening glow' },
+              { path: '/category/perfume', label: 'perfume' },
+              { path: '/category/hand-lip', label: 'hand&lip' },
+              { path: '/category/body', label: 'body' },
+              { path: '/category/home-fragrance', label: 'home fragrance' },
               { path: '/store', label: 'store' },
             ].map(({ path, label }) => (
               <li key={path}>
