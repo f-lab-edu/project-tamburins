@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 
 interface Product {
   id: string;
@@ -9,42 +9,44 @@ interface Product {
   category: string;
 }
 
+const fetchProducts = async (): Promise<Product[]> => {
+  const response = await fetch('/data/products.json');
+  if (!response.ok) {
+    throw new Error('데이터를 불러오는 데 실패했습니다.');
+  }
+  return response.json();
+};
+
 const CategoryPage = () => {
   const { category } = useParams<{ category: string }>();
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetch('/data/products.json')
-      .then((response) => response.json())
-      .then((data) => {
-        const filteredProducts = data.filter(
-          (product: Product) => product.category === category
-        );
-        setProducts(filteredProducts);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError('데이터를 불러오는 중 오류가 발생했습니다.');
-        setLoading(false);
-      });
-  }, [category]);
+  const {
+    data: products,
+    error,
+    isLoading,
+  } = useQuery({
+    queryKey: ['products'],
+    queryFn: fetchProducts,
+    staleTime: 1000 * 60 * 5,
+  });
 
-  if (loading) return <p>로딩 중...</p>;
-  if (error) return <p>{error}</p>;
+  if (isLoading) return <p>로딩 중...</p>;
+  if (error) return <p>오류 발생: {error.message}</p>;
+
+  const filteredProducts =
+    products?.filter((product) => product.category === category) || [];
 
   return (
     <main>
-      <h2>{category?.replace('-', ' ').toUpperCase()}</h2>
+      <h1>{category?.replace('-', ' ').toUpperCase()}</h1>
 
-      {products.length > 0 ? (
+      {filteredProducts.length > 0 ? (
         <ul>
-          {products.map((product) => (
+          {filteredProducts.map((product) => (
             <li key={product.id}>
               <Link to={`/product/${product.id}`}>
                 <img src={product.image} alt={product.name} width='200' />
-                <h3>{product.name}</h3>
+                <h2>{product.name}</h2>
                 <p>{product.price}</p>
               </Link>
             </li>

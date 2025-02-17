@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 
 interface Product {
   id: string;
@@ -9,36 +9,38 @@ interface Product {
   category: string;
 }
 
+const fetchProducts = async (): Promise<Product[]> => {
+  const response = await fetch('/data/products.json');
+  if (!response.ok) {
+    throw new Error('데이터를 불러오는 데 실패했습니다.');
+  }
+  return response.json();
+};
+
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const {
+    data: products,
+    error,
+    isLoading,
+  } = useQuery({
+    queryKey: ['products'],
+    queryFn: fetchProducts,
+  });
 
-  useEffect(() => {
-    fetch('/data/products.json')
-      .then((response) => response.json())
-      .then((data) => {
-        const foundProduct = data.find((p: Product) => p.id === id);
-        if (!foundProduct) throw new Error('상품을 찾을 수 없습니다.');
-        setProduct(foundProduct);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-        setLoading(false);
-      });
-  }, [id]);
+  if (isLoading) return <p>로딩 중...</p>;
+  if (error) return <p>오류 발생: {error.message}</p>;
 
-  if (loading) return <p>로딩 중...</p>;
-  if (error) return <p>오류 발생: {error}</p>;
+  const product = products?.find((product) => product.id === id);
+
+  if (!product) return <p>상품을 찾을 수 없습니다.</p>;
 
   return (
     <main>
-      <h1>{product?.name}</h1>
-      <img src={product?.image} alt={product?.name} width='300' />
-      <p>{product?.price}</p>
-      <p>카테고리: {product?.category}</p>
+      <h1>{product.name}</h1>
+      <img src={product.image} alt={product.name} width='300' />
+      <p>{product.price}</p>
+      <p>카테고리: {product.category}</p>
     </main>
   );
 };
