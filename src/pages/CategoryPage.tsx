@@ -37,24 +37,28 @@ const CategoryPage = () => {
     products?.filter((product) => product.category === category) || [];
 
   return (
-    <main>
-      <h1>{category?.replace('-', ' ').toUpperCase()}</h1>
+    <main className='main'>
+      <section className='section'>
+        <div className='section_inner'>
+          <h2>{category?.replace('-', ' ').toUpperCase()}</h2>
 
-      {filteredProducts.length > 0 ? (
-        <ul>
-          {filteredProducts.map((product) => (
-            <li key={product.id}>
-              <Link to={`/product/${product.id}`}>
-                <img src={product.image} alt={product.name} width='200' />
-                <h2>{product.name}</h2>
-                <p>{product.price}</p>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>현재 이 카테고리에 등록된 상품이 없습니다.</p>
-      )}
+          {filteredProducts.length > 0 ? (
+            <ul className='flex'>
+              {filteredProducts.map((product) => (
+                <li key={product.id}>
+                  <Link to={`/product/${product.id}`}>
+                    <img src={product.image} alt={product.name} width='200' />
+                    <h3>{product.name}</h3>
+                    <p>{product.price}</p>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>현재 이 카테고리에 등록된 상품이 없습니다.</p>
+          )}
+        </div>
+      </section>
     </main>
   );
 };

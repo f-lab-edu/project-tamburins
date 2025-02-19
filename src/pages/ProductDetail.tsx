@@ -36,11 +36,15 @@ const ProductDetail = () => {
   if (!product) return <p>상품을 찾을 수 없습니다.</p>;
 
   return (
-    <main>
-      <h1>{product.name}</h1>
-      <img src={product.image} alt={product.name} width='300' />
-      <p>{product.price}</p>
-      <p>카테고리: {product.category}</p>
+    <main className='main'>
+      <section className='section'>
+        <div className='section_inner'>
+          <h2>{product.name}</h2>
+          <img src={product.image} alt={product.name} width='300' />
+          <p>{product.price}</p>
+          <p>카테고리: {product.category}</p>
+        </div>
+      </section>
     </main>
   );
 };
