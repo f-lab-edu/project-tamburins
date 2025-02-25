@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import CartModal from '../components/CartModal';
+import { useCart } from '../context/CartContext';
 
 interface Product {
   id: string;
@@ -42,7 +43,7 @@ const ProductDetail = () => {
   const product = products?.find((product) => product.id === id);
   const [quantity, setQuantity] = useState(1);
   const [cart, setCart] = useState<CartItem[]>([]);
-  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { isCartOpen, openCart, closeCart } = useCart();
 
   if (isLoading) return <p className='text-center py-10 text-lg'>로딩 중...</p>;
   if (error)
@@ -76,7 +77,7 @@ const ProductDetail = () => {
       }
     });
 
-    setIsCartOpen(true);
+    openCart();
   };
 
   return (
@@ -104,9 +105,7 @@ const ProductDetail = () => {
         </div>
       </section>
 
-      {isCartOpen && (
-        <CartModal cartItems={cart} onClose={() => setIsCartOpen(false)} />
-      )}
+      {isCartOpen && <CartModal cartItems={cart} onClose={closeCart} />}
     </main>
   );
 };

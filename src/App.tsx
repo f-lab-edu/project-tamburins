@@ -6,21 +6,23 @@ import CategoryPage from './pages/CategoryPage';
 import ProductDetail from './pages/ProductDetail';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { CartProvider } from './context/CartContext';
 
 const queryClient = new QueryClient();
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Router>
-        <Header />
-
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/category/:category' element={<CategoryPage />} />
-          <Route path='/product/:id' element={<ProductDetail />} />
-        </Routes>
-      </Router>
+      <CartProvider>
+        <Router>
+          <Header />
+          <Routes>
+            <Route path='/' element={<Home />} />
+            <Route path='/category/:category' element={<CategoryPage />} />
+            <Route path='/product/:id' element={<ProductDetail />} />
+          </Routes>
+        </Router>
+      </CartProvider>
       <ReactQueryDevtools initialIsOpen={true} />
     </QueryClientProvider>
   );
