@@ -1,8 +1,9 @@
 import { useParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import CartModal from '../components/CartModal';
 import { useCart } from '../context/CartContext';
+import { Suspense } from 'react';
 
 interface Product {
   id: string;
@@ -28,13 +29,10 @@ const fetchProducts = async (): Promise<Product[]> => {
   return response.json();
 };
 
-const ProductDetail = () => {
+const ProductContent = () => {
   const { id } = useParams<{ id: string }>();
-  const {
-    data: products,
-    error,
-    isLoading,
-  } = useQuery({
+
+  const { data: products } = useSuspenseQuery({
     queryKey: ['products'],
     queryFn: fetchProducts,
     staleTime: 1000 * 60 * 5,
@@ -45,9 +43,6 @@ const ProductDetail = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
   const { isCartOpen, openCart, closeCart } = useCart();
 
-  if (isLoading) return <p className='text-center py-10 text-lg'>로딩 중...</p>;
-  if (error)
-    return <p className='text-center py-10 text-red-500'>{error.message}</p>;
   if (!product)
     return (
       <p className='text-center py-10 text-gray-500'>
@@ -109,5 +104,11 @@ const ProductDetail = () => {
     </main>
   );
 };
+
+const ProductDetail = () => (
+  <Suspense fallback={<p>로딩 중...</p>}>
+    <ProductContent />
+  </Suspense>
+);
 
 export default ProductDetail;

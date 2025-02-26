@@ -1,5 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { Suspense } from 'react';
 
 interface Product {
   id: string;
@@ -17,21 +18,14 @@ const fetchProducts = async (): Promise<Product[]> => {
   return response.json();
 };
 
-const CategoryPage = () => {
+const ProductList = () => {
   const { category } = useParams<{ category: string }>();
 
-  const {
-    data: products,
-    error,
-    isLoading,
-  } = useQuery({
+  const { data: products } = useSuspenseQuery({
     queryKey: ['products'],
     queryFn: fetchProducts,
     staleTime: 1000 * 60 * 5,
   });
-
-  if (isLoading) return <p>로딩 중...</p>;
-  if (error) return <p>오류 발생: {error.message}</p>;
 
   const filteredProducts =
     products?.filter((product) => product.category === category) || [];
@@ -62,5 +56,11 @@ const CategoryPage = () => {
     </main>
   );
 };
+
+const CategoryPage = () => (
+  <Suspense fallback={<p>로딩 중...</p>}>
+    <ProductList />
+  </Suspense>
+);
 
 export default CategoryPage;
