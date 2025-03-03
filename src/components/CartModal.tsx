@@ -6,7 +6,7 @@ const CartModal = ({ onClose }: { onClose: () => void }) => {
 
   let totalPrice = 0;
   cartItems.forEach((item) => {
-    totalPrice += Number(item.price.replace(/,/g, '') || 0) * item.quantity;
+    totalPrice += item.price * item.quantity;
   });
   return (
     <div className='fixed inset-0 flex justify-end z-50'>

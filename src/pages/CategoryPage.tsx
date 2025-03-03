@@ -6,7 +6,7 @@ import { useCart } from '../context/CartContext';
 interface Product {
   id: string;
   name: string;
-  price: string;
+  price: number;
   image: string;
   category: string;
 }
