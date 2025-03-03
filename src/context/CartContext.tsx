@@ -4,12 +4,16 @@ interface CartItem {
   id: string;
   name: string;
   price: number;
+  image: string;
   quantity: number;
 }
 interface CartContextType {
   isCartOpen: boolean;
   openCart: () => void;
   closeCart: () => void;
+  addToCart: (item: CartItem) => void;
+  updateQuantity: (id: string, quantity: number) => void;
+  removeFromCart: (id: string) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -38,9 +42,29 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     openCart(); // 상품 추가 시 자동으로 모달 열기
   };
 
+  // 장바구니 수량 변경
+  const updateQuantity = (id: string, quantity: number) => {
+    setCartItems((prevCart) =>
+      prevCart.map((item) => (item.id === id ? { ...item, quantity } : item))
+    );
+  };
+
+  // 장바구니 상품 삭제
+  const removeFromCart = (id: string) => {
+    setCartItems((prevCart) => prevCart.filter((item) => item.id !== id));
+  };
+
   return (
     <CartContext.Provider
-      value={{ isCartOpen, cartItems, openCart, closeCart, addToCart }}
+      value={{
+        isCartOpen,
+        cartItems,
+        openCart,
+        closeCart,
+        addToCart,
+        updateQuantity,
+        removeFromCart,
+      }}
     >
       {children}
     </CartContext.Provider>

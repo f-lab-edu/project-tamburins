@@ -2,49 +2,49 @@
   {
     "id": "1",
     "name": "퍼퓸 이브닝글로우",
-    "price": "₩149,000",
+    "price": "149,000",
     "image": "/images/Thumbnail03_Evening_Glow_Shell_15ml.jpg",
     "category": "evening-glow"
   },
   {
     "id": "2",
     "name": "쉘 퍼퓸 핸드 이브닝 글로우",
-    "price": "₩18,500",
+    "price": "18,500",
     "image": "/images/Thumbnail03_Evening_Glow_Perfume.jpg",
     "category": "evening-glow"
   },
   {
     "id": "3",
     "name": "에그 립밤 로즈우디 글로우",
-    "price": "₩28,900",
+    "price": "28,900",
     "image": "/images/Thumbnail03_Evening_Glow_EggBalm.jpg",
     "category": "evening-glow"
   },
   {
     "id": "4",
     "name": "에그 퍼퓸 펌키니",
-    "price": "₩45,800",
+    "price": "45,800",
     "image": "/images/Thumbnail_EggPerfume_pumkini.jpg",
     "category": "perfume"
   },
   {
     "id": "5",
     "name": "쉘 퍼퓸 핸드 이브닝글로우",
-    "price": "₩55,000",
+    "price": "55,000",
     "image": "/images/Thumbnail03_Evening_Glow_Shell_30ml.jpg",
     "category": "hand-lip"
   },
   {
     "id": "6",
     "name": "샤워리바디워시 얼리모닝듀",
-    "price": "₩34,500",
+    "price": "34,500",
     "image": "/images/Thumbnail_Shrybody_wash200_EarlyMorningDew.jpg",
     "category": "body"
   },
   {
     "id": "7",
     "name": "카 디퓨저 비가리코",
-    "price": "₩85,000",
+    "price": "85,000",
     "image": "/images/CarDiffuser_Bigarico.png",
     "category": "home-fragrance"
   }
