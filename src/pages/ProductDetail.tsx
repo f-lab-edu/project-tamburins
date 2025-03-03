@@ -1,7 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import CartModal from '../components/CartModal';
 import { useCart } from '../context/CartContext';
 import { Suspense } from 'react';
 
@@ -12,13 +11,6 @@ interface Product {
   image: string;
   category: string;
   description: string;
-}
-
-interface CartItem {
-  id: string;
-  name: string;
-  price: string;
-  quantity: number;
 }
 
 const fetchProducts = async (): Promise<Product[]> => {
@@ -40,8 +32,7 @@ const ProductContent = () => {
 
   const product = products?.find((product) => product.id === id);
   const [quantity, setQuantity] = useState(1);
-  const [cart, setCart] = useState<CartItem[]>([]);
-  const { isCartOpen, openCart, closeCart } = useCart();
+  const { addToCart } = useCart();
 
   if (!product)
     return (
@@ -50,29 +41,13 @@ const ProductContent = () => {
       </p>
     );
 
-  const addToCart = () => {
-    setCart((prevCart) => {
-      const existingItem = prevCart.find((item) => item.id === product.id);
-      if (existingItem) {
-        return prevCart.map((item) =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + quantity }
-            : item
-        );
-      } else {
-        return [
-          ...prevCart,
-          {
-            id: product.id,
-            name: product.name,
-            price: product.price,
-            quantity,
-          },
-        ];
-      }
+  const handleAddToCart = () => {
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      quantity,
     });
-
-    openCart();
   };
 
   return (
@@ -92,15 +67,13 @@ const ProductContent = () => {
           <div className='flex space-x-4'>
             <button
               className='w-full py-3 bg-black text-white text-lg font-medium rounded-md hover:bg-gray-900 transition'
-              onClick={addToCart}
+              onClick={handleAddToCart}
             >
               장바구니에 추가
             </button>
           </div>
         </div>
       </section>
-
-      {isCartOpen && <CartModal cartItems={cart} onClose={closeCart} />}
     </main>
   );
 };

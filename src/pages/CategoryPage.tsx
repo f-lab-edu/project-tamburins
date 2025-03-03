@@ -1,6 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Suspense } from 'react';
+import { useCart } from '../context/CartContext';
 
 interface Product {
   id: string;
@@ -20,6 +21,7 @@ const fetchProducts = async (): Promise<Product[]> => {
 
 const ProductList = () => {
   const { category } = useParams<{ category: string }>();
+  const { addToCart } = useCart();
 
   const { data: products } = useSuspenseQuery({
     queryKey: ['products'],
@@ -45,6 +47,19 @@ const ProductList = () => {
                     <h3>{product.name}</h3>
                     <p>{product.price}</p>
                   </Link>
+                  <button
+                    className='mt-2 w-full py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition'
+                    onClick={() =>
+                      addToCart({
+                        id: product.id,
+                        name: product.name,
+                        price: product.price,
+                        quantity: 1,
+                      })
+                    }
+                  >
+                    장바구니 추가
+                  </button>
                 </li>
               ))}
             </ul>
