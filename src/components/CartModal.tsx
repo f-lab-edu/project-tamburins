@@ -4,10 +4,10 @@ import { useCart } from '../context/CartContext';
 const CartModal = ({ onClose }: { onClose: () => void }) => {
   const { cartItems, updateQuantity, removeFromCart } = useCart();
 
-  let totalPrice = 0;
-  cartItems.forEach((item) => {
-    totalPrice += item.price * item.quantity;
-  });
+  const totalPrice = cartItems.reduce((acc, item) => {
+    return acc + item.product.price * item.quantity;
+  }, 0);
+
   return (
     <div className='fixed inset-0 flex justify-end z-50'>
       <div className='absolute inset-0 bg-black/50' onClick={onClose}></div>
@@ -30,24 +30,26 @@ const CartModal = ({ onClose }: { onClose: () => void }) => {
           ) : (
             <ul className='space-y-4'>
               {cartItems.map((item) => (
-                <li key={item.id} className='flex justify-between'>
+                <li key={item.product.id} className='flex justify-between'>
                   <img
-                    src={item.image}
-                    alt={item.name}
+                    src={item.product.image}
+                    alt={item.product.name}
                     className='w-20 h-24 object-cover rounded-md'
                   />
                   <div className='flex flex-col flex-grow ml-4'>
-                    <span className='font-medium'>{item.name}</span>
+                    <span className='font-medium'>{item.product.name}</span>{' '}
                     <span className='text-gray-600'>
-                      ₩{item.price.toLocaleString()}
+                      ₩{item.product.price.toLocaleString()}
                     </span>
-
                     <div className='flex items-center mt-2'>
                       <label className='mr-2 text-sm'>수량</label>
                       <select
                         value={item.quantity}
                         onChange={(e) =>
-                          updateQuantity(item.id, Number(e.target.value))
+                          updateQuantity(
+                            item.product.id,
+                            Number(e.target.value)
+                          )
                         }
                         className='border px-2 py-1 rounded-md'
                       >
@@ -61,7 +63,7 @@ const CartModal = ({ onClose }: { onClose: () => void }) => {
                   </div>
 
                   <button
-                    onClick={() => removeFromCart(item.id)}
+                    onClick={() => removeFromCart(item.product.id)}
                     className='ml-4'
                   >
                     <PiTrashThin />

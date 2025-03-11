@@ -1,17 +1,8 @@
 import { useParams } from 'react-router-dom';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useCart } from '../context/CartContext';
-import { Suspense } from 'react';
-
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-  category: string;
-  description: string;
-}
+import { Product } from '../types';
 
 const fetchProducts = async (): Promise<Product[]> => {
   const response = await fetch('/data/products.json');
@@ -42,13 +33,7 @@ const ProductContent = () => {
     );
 
   const handleAddToCart = () => {
-    addToCart({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image: product.image,
-      quantity,
-    });
+    addToCart({ product, quantity });
   };
 
   return (
@@ -61,10 +46,11 @@ const ProductContent = () => {
             className='w-full max-w-lg object-cover rounded-lg'
           />
         </div>
-
         <div className='w-full md:w-1/2 space-y-6'>
           <h2 className='text-2xl font-bold'>{product.name}</h2>
-          <p className='text-lg font-semibold text-gray-700'>{product.price}</p>
+          <p className='text-lg font-semibold text-gray-700'>
+            {product.price.toLocaleString()}원
+          </p>
           <div className='flex space-x-4'>
             <button
               className='w-full py-3 bg-black text-white text-lg font-medium rounded-md hover:bg-gray-900 transition'
