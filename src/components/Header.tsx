@@ -1,10 +1,12 @@
 import { Link, useLocation } from 'react-router-dom';
 import { FaSearch, FaUser, FaShoppingBag } from 'react-icons/fa'; // 아이콘 추가
+import { useAuth } from '../hooks/useAuth';
 import logo from '../assets/logo.svg';
 
 const Header = () => {
   const location = useLocation(); // 현재 경로 가져오기
   const isDetailPage = location.pathname !== '/'; // 루트가 아닐 경우 (상세페이지) 여부 확인
+  const { data: user } = useAuth();
 
   return (
     <header className='fixed top-0 left-0 w-full z-50 bg-transparent'>
@@ -59,7 +61,7 @@ const Header = () => {
           </div>
 
           <Link
-            to='/login'
+            to={user ? '/mypage' : '/login'}
             className={isDetailPage ? 'text-black' : 'text-white'}
           >
             <FaUser size={20} />
