@@ -1,30 +1,43 @@
 import { useState, FormEvent } from 'react';
+import { useMutation } from '@tanstack/react-query';
 import { supabase } from '../api/supabaseClient';
+import { useAuth } from '../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
+  const { data: user } = useAuth();
 
-  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError('');
+  const loginMutation = useMutation({
+    mutationFn: async () => {
+      const { error, data } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (error) {
-      setError(error.message);
-    } else {
+      if (error) throw new Error(error.message);
+      return data;
+    },
+    onSuccess: () => {
       console.log('로그인 성공');
-      window.location.href = '/';
-    }
-  };
+      navigate('/');
+    },
+    onError: (error: Error) => {
+      alert(error.message);
+    },
+  });
 
   return (
-    <form onSubmit={handleLogin} className='mt-6'>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        loginMutation.mutate();
+      }}
+      className='mt-6'
+    >
       <div className='mb-4'>
         <input
           type='email'
