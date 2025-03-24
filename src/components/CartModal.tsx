@@ -1,12 +1,14 @@
 import { PiTrashThin } from 'react-icons/pi';
 import { useCart } from '../context/CartContext';
+import _ from 'lodash';
 
 const CartModal = ({ onClose }: { onClose: () => void }) => {
   const { cartItems, updateQuantity, removeFromCart } = useCart();
 
-  const totalPrice = cartItems.reduce((acc, item) => {
-    return acc + item.product.price * item.quantity;
-  }, 0);
+  const totalPrice = _.sumBy(
+    cartItems,
+    (item) => item.product.price * item.quantity
+  );
 
   return (
     <div className='fixed inset-0 flex justify-end z-50'>
