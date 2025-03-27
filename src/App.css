@@ -3,3 +3,15 @@
     font-family: 'Noto Sans KR', sans-serif;
   }
 }
+
+.main {
+  @apply pt-[76px];
+}
+
+.section {
+  @apply px-[80px];
+}
+
+.section_inner {
+  @apply max-w-[1464px] mx-auto;
+}

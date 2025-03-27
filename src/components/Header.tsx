@@ -1,10 +1,12 @@
 import { Link, useLocation } from 'react-router-dom';
 import { FaSearch, FaUser, FaShoppingBag } from 'react-icons/fa'; // 아이콘 추가
 import logo from '../assets/logo.svg';
+import { useCart } from '../context/CartContext';
 
 const Header = () => {
   const location = useLocation(); // 현재 경로 가져오기
   const isDetailPage = location.pathname !== '/'; // 루트가 아닐 경우 (상세페이지) 여부 확인
+  const { openCart } = useCart();
 
   return (
     <header className='fixed top-0 left-0 w-full z-50 bg-transparent'>
@@ -19,11 +21,11 @@ const Header = () => {
         <nav>
           <ul className='flex space-x-6'>
             {[
-              { path: '/evening-glow', label: 'evening glow' },
-              { path: '/perfume', label: 'perfume' },
-              { path: '/hand-lip', label: 'hand&lip' },
-              { path: '/body', label: 'body' },
-              { path: '/home-fragrance', label: 'home fragrance' },
+              { path: '/category/evening-glow', label: 'evening glow' },
+              { path: '/category/perfume', label: 'perfume' },
+              { path: '/category/hand-lip', label: 'hand&lip' },
+              { path: '/category/body', label: 'body' },
+              { path: '/category/home-fragrance', label: 'home fragrance' },
               { path: '/store', label: 'store' },
             ].map(({ path, label }) => (
               <li key={path}>
@@ -65,15 +67,12 @@ const Header = () => {
             <FaUser size={20} />
           </Link>
 
-          <Link
-            to='/cart'
-            className={`relative ${isDetailPage ? 'text-black' : 'text-white'}`}
+          <button
+            onClick={openCart}
+            className={isDetailPage ? 'text-black' : 'text-white'}
           >
             <FaShoppingBag size={20} />
-            <span className='absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full'>
-              0
-            </span>
-          </Link>
+          </button>
         </div>
       </div>
     </header>
